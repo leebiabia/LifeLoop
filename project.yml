@@ -1,0 +1,29 @@
+name: LifeLoop
+options:
+  bundleIdPrefix: app.lifeloop
+  deploymentTarget:
+    iOS: "18.0"
+  xcodeVersion: "16.0"
+
+settings:
+  base:
+    SWIFT_VERSION: "5.0"
+    ENABLE_USER_SCRIPT_SANDBOXING: "NO"
+
+targets:
+  LifeLoop:
+    type: application
+    platform: iOS
+    sources:
+      - path: GoodList
+    settings:
+      base:
+        INFOPLIST_FILE: GoodList/Info.plist
+        PRODUCT_BUNDLE_IDENTIFIER: app.lifeloop.lifeloop
+    preBuildScripts:
+      - name: "SwiftLint"
+        script: |
+          if which swiftlint > /dev/null; then
+            swiftlint
+          fi
+        basedOnDependencyAnalysis: false

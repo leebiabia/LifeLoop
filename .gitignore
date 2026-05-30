@@ -1,0 +1,26 @@
+# Xcode
+*.xcuserdata
+*.xcworkspace
+!default.xcworkspace
+*.xcbkptlist
+DerivedData/
+build/
+*.xcodeproj/xcuserdata/
+*.xcodeproj/project.xcworkspace/
+
+# Swift Package Manager
+.build/
+Packages/
+Package.resolved
+
+# CocoaPods
+Pods/
+
+# Carthage
+Carthage/Build/
+
+# macOS
+.DS_Store
+
+# Superpowers
+.superpowers/
