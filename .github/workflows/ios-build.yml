@@ -10,14 +10,14 @@ on:
 jobs:
   build:
     name: Build LifeLoop
-    runs-on: macos-15
+    runs-on: macos-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Select Xcode
-        run: sudo xcode-select -s /Applications/Xcode_16.app
+      - name: Show available Xcodes
+        run: ls /Applications/Xcode*.app
 
       - name: Install XcodeGen
         run: brew install xcodegen
@@ -27,6 +27,7 @@ jobs:
 
       - name: Build for iOS simulator
         run: |
+          set -o pipefail
           xcodebuild build \
             -project LifeLoop.xcodeproj \
             -scheme LifeLoop \
@@ -34,11 +35,12 @@ jobs:
             -configuration Debug \
             CODE_SIGN_IDENTITY="" \
             CODE_SIGNING_REQUIRED=NO \
-            CODE_SIGNING_ALLOWED=NO
+            CODE_SIGNING_ALLOWED=NO \
+            2>&1 | tee build.log
 
-      - name: Upload build log on failure
-        if: failure()
+      - name: Upload build log
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: build-log
-          path: ~/Library/Developer/Xcode/DerivedData/**/Logs/Build/*.log
+          path: build.log
