@@ -8,6 +8,8 @@ final class HabitRecord {
     var completedAt: Date
     var note: String
 
+    @Relationship(inverse: \DoItem.habitRecords) var item: DoItem?
+
     init(id: UUID = UUID(), date: Date = Date(), completedAt: Date = Date(), note: String = "") {
         self.id = id
         self.date = Calendar.current.startOfDay(for: date)

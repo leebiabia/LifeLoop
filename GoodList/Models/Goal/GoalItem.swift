@@ -24,6 +24,7 @@ final class GoalItem {
         id: UUID = UUID(),
         name: String,
         desc: String = "",
+        createdAt: Date = Date(),
         goalType: GoalType = .progress,
         color: String = "#007AFF",
         icon: String = "target",
@@ -35,7 +36,7 @@ final class GoalItem {
         self.id = id
         self.name = name
         self.desc = desc
-        self.createdAt = Date()
+        self.createdAt = createdAt
         self.goalTypeRaw = goalType.rawValue
         self.color = color
         self.icon = icon

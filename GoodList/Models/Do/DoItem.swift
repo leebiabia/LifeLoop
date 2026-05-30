@@ -19,7 +19,7 @@ final class DoItem {
     var habitStartDate: Date?
     var habitEndDate: Date?
     var reminderTime: Date?
-    var cycleType: String?
+    var cycleTypeRaw: String?
     var customDates: [Date]?
     var currentStreak: Int
     var totalCount: Int
@@ -33,12 +33,13 @@ final class DoItem {
     @Relationship(deleteRule: .cascade)
     var habitRecords: [HabitRecord]?
 
-    var tags: [Tag]?
+    @Relationship var tags: [Tag]?
 
     init(
         id: UUID = UUID(),
         name: String,
         note: String = "",
+        createdAt: Date = Date(),
         doType: DoType = .today,
         priority: Priority = .medium,
         startTime: Date? = nil,
@@ -47,7 +48,7 @@ final class DoItem {
         habitStartDate: Date? = nil,
         habitEndDate: Date? = nil,
         reminderTime: Date? = nil,
-        cycleType: String? = nil,
+        cycleType: CycleType? = nil,
         customDates: [Date]? = nil,
         currentStreak: Int = 0,
         totalCount: Int = 0,
@@ -59,7 +60,7 @@ final class DoItem {
         self.id = id
         self.name = name
         self.note = note
-        self.createdAt = Date()
+        self.createdAt = createdAt
         self.doTypeRaw = doType.rawValue
         self.priorityRaw = priority.rawValue
         self.startTime = startTime
@@ -68,7 +69,7 @@ final class DoItem {
         self.habitStartDate = habitStartDate
         self.habitEndDate = habitEndDate
         self.reminderTime = reminderTime
-        self.cycleType = cycleType
+        self.cycleTypeRaw = cycleType?.rawValue
         self.customDates = customDates
         self.currentStreak = currentStreak
         self.totalCount = totalCount
@@ -86,6 +87,11 @@ final class DoItem {
         Priority(rawValue: priorityRaw) ?? .medium
     }
 
+    var cycleType: CycleType? {
+        guard let raw = cycleTypeRaw else { return nil }
+        return CycleType(rawValue: raw)
+    }
+
     var periodStatus: PeriodStatus {
         guard doType == .period, let start = periodStartDate, let end = periodEndDate else {
             return .none
@@ -93,8 +99,10 @@ final class DoItem {
         let now = Date()
         if periodIsCompleted { return .completed }
         if now > end { return .overdue }
-        if Calendar.current.isDateInToday(end) || now >= end { return .dueToday }
-        if now >= start { return .active }
+        if now >= start {
+            if Calendar.current.isDateInToday(end) { return .dueToday }
+            return .active
+        }
         return .upcoming
     }
 }
