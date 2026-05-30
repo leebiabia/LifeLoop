@@ -1,0 +1,30 @@
+<h2>澄清问题 3：圆环进度组件的交互深度</h2>
+<p class="subtitle">这是 LifeLoop 最核心的视觉元素。交互复杂度决定 Canvas/Shape 的技术选型和开发工时。</p>
+
+<div class="options">
+  <div class="option" data-choice="a" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <h3>纯展示动画（V1 推荐）</h3>
+      <p>圆环仅在<strong>页面出现时</strong>执行填充动画（类似 Apple Fitness 打开时的效果）。用户不可手动交互圆环本身——点击圆环跳转到详情页。实现：SwiftUI <code>Canvas</code> + <code>Animation.timing</code>。开发工时低，效果已经足够好。</p>
+    </div>
+  </div>
+  <div class="option" data-choice="b" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>触控交互</h3>
+      <p>在 A 的基础上，增加<strong>滑动/拖拽</strong>交互——用户可以在圆环上滑动来快速记录进度（例如在外圈滑动增加计数）。类似 Apple Watch 活动圆环的触觉反馈风格。需要处理手势识别、触觉反馈（Haptics）。开发工时中等。</p>
+    </div>
+  </div>
+  <div class="option" data-choice="c" onclick="toggleSelect(this)">
+    <div class="letter">C</div>
+    <div class="content">
+      <h3>完整交互 + 粒子效果</h3>
+      <p>在 B 的基础上，增加<strong>粒子/光晕</strong>效果——完成目标时圆环爆发粒子动画，连续打卡里程碑有特殊庆祝效果。需要 SpriteKit/SwiftUI 混合渲染。开发工时高，但体验最有「哇」的感觉。</p>
+    </div>
+  </div>
+</div>
+
+<div class="section" style="margin-top: 24px;">
+  <p style="color: var(--text-secondary); font-size: 14px;">💡 <strong>推荐 A：</strong>V1 聚焦核心功能完整度。Apple Fitness 级别的进入动画已经能产生足够的视觉品质感。交互和粒子效果可以在 V2 作为体验升级加入。</p>
+</div>

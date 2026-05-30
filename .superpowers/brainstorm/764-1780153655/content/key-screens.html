@@ -1,0 +1,135 @@
+<h2>核心页面设计</h2>
+<p class="subtitle">5 个 Tab 的关键布局 + 圆环组件预览</p>
+
+<div class="section">
+  <h3>Tab 1 — 今日 (Today)</h3>
+  <p style="color: var(--text-secondary); font-size: 13px;">用户打开应用看到的第一屏，聚合今日所有内容</p>
+</div>
+
+<div class="split">
+  <div class="mockup">
+    <div class="mockup-header">今日页面布局</div>
+    <div class="mockup-body" style="padding:16px;background:#f2f2f7;font-family:-apple-system,sans-serif;font-size:11px;min-height:420px;">
+      <div style="font-size:13px;font-weight:700;margin-bottom:8px;">📅 今日</div>
+      <div style="font-size:20px;font-weight:700;margin-bottom:16px;">5月30日 周五</div>
+
+      <!-- 摘要环形卡片 -->
+      <div style="background:#fff;border-radius:14px;padding:14px;margin-bottom:10px;display:flex;gap:16px;align-items:center;">
+        <div style="position:relative;width:80px;height:80px;flex-shrink:0;">
+          <svg viewBox="0 0 100 100" style="width:80px;height:80px;transform:rotate(-90deg);">
+            <circle cx="50" cy="50" r="38" fill="none" stroke="#E5E5EA" stroke-width="8"/>
+            <circle cx="50" cy="50" r="38" fill="none" stroke="#007AFF" stroke-width="8" stroke-dasharray="238.8" stroke-dashoffset="50" stroke-linecap="round"/>
+          </svg>
+          <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;">
+            <div style="font-size:14px;font-weight:700;">79%</div>
+            <div style="font-size:8px;color:#999;">完成率</div>
+          </div>
+        </div>
+        <div>
+          <div style="margin-bottom:4px;"><span style="color:#FF9500;">⚡</span> 3 项任务</div>
+          <div style="margin-bottom:4px;"><span style="color:#34C759;">🔄</span> 2 项打卡</div>
+          <div style="margin-bottom:4px;"><span style="color:#007AFF;">🎯</span> 1 个目标到期</div>
+        </div>
+      </div>
+
+      <!-- 任务列表 -->
+      <div style="background:#fff;border-radius:14px;padding:12px;margin-bottom:8px;font-size:11px;">
+        <div style="font-weight:600;margin-bottom:8px;">任务</div>
+        <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #f0f0f0;">
+          <div style="width:18px;height:18px;border:2px solid #ccc;border-radius:50%;"></div>
+          <span style="flex:1;">完成项目文档</span>
+          <span style="color:#FF3B30;font-size:10px;">⏰ 16:00</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #f0f0f0;">
+          <div style="width:18px;height:18px;border:2px solid #ccc;border-radius:50%;"></div>
+          <span style="flex:1;">回复客户邮件</span>
+          <span style="color:#999;font-size:10px;">无截止</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;padding:6px 0;">
+          <div style="width:18px;height:18px;border:2px solid #ccc;border-radius:50%;"></div>
+          <span style="flex:1;">代码 Review</span>
+          <span style="color:#FF3B30;font-size:10px;">⏰ 已逾期</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mockup">
+    <div class="mockup-header">交互行为</div>
+    <div class="mockup-body" style="padding:16px;font-size:12px;color:#1d1d1f;">
+      <p><strong>下拉：</strong>手动刷新今日内容</p>
+      <p><strong>点击任务：</strong>展开详情 / 快速完成</p>
+      <p><strong>左滑任务：</strong>标记完成 / 删除</p>
+      <p><strong>点击圆环：</strong>跳转 Goal 详情</p>
+      <p><strong>长按卡片：</strong>重新排序</p>
+      <p style="color:#999;font-size:11px;margin-top:12px;">Period 任务到达开始日期后自动出现在此页面</p>
+    </div>
+  </div>
+</div>
+
+<div class="section" style="margin-top: 24px;">
+  <h3>核心组件：圆环进度</h3>
+  <p style="color: var(--text-secondary); font-size: 13px;">Apple Fitness 风格、双环/单环、动画填充 + 粒子庆祝</p>
+</div>
+
+<div class="split">
+  <div class="mockup">
+    <div class="mockup-header">双环（Progress / Accumulation Goal）</div>
+    <div class="mockup-body" style="padding:24px;text-align:center;background:#f2f2f7;">
+      <div style="position:relative;width:180px;height:180px;margin:0 auto;">
+        <!-- 外圈：记录次数 -->
+        <svg viewBox="0 0 200 200" style="width:180px;height:180px;transform:rotate(-90deg);">
+          <circle cx="100" cy="100" r="85" fill="none" stroke="#E5E5EA" stroke-width="12"/>
+          <circle cx="100" cy="100" r="85" fill="none" stroke="#34C759" stroke-width="12" stroke-dasharray="534" stroke-dashoffset="214" stroke-linecap="round"/>
+          <!-- 内圈：进度百分比 -->
+          <circle cx="100" cy="100" r="65" fill="none" stroke="#E5E5EA" stroke-width="12"/>
+          <circle cx="100" cy="100" r="65" fill="none" stroke="#007AFF" stroke-width="12" stroke-dasharray="408" stroke-dashoffset="265" stroke-linecap="round"/>
+        </svg>
+        <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;">
+          <div style="font-size:28px;font-weight:700;color:#1d1d1f;">35<span style="font-size:14px;">%</span></div>
+          <div style="font-size:10px;color:#999;">35 / 100 本</div>
+          <div style="font-size:10px;color:#34C759;margin-top:2px;">📝 12 次记录</div>
+        </div>
+      </div>
+      <div style="margin-top:12px;font-size:10px;color:#999;">
+        <span style="color:#34C759;">●</span> 外圈：记录次数 &nbsp;
+        <span style="color:#007AFF;">●</span> 内圈：目标进度
+      </div>
+    </div>
+  </div>
+
+  <div class="mockup">
+    <div class="mockup-header">单环（Lifetime Goal）</div>
+    <div class="mockup-body" style="padding:24px;text-align:center;background:#f2f2f7;">
+      <div style="position:relative;width:180px;height:180px;margin:0 auto;">
+        <svg viewBox="0 0 200 200" style="width:180px;height:180px;transform:rotate(-90deg);">
+          <circle cx="100" cy="100" r="85" fill="none" stroke="#E5E5EA" stroke-width="14"/>
+          <circle cx="100" cy="100" r="85" fill="none" stroke="#FF9500" stroke-width="14" stroke-dasharray="534" stroke-dashoffset="200" stroke-linecap="round"/>
+        </svg>
+        <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;">
+          <div style="font-size:32px;font-weight:700;color:#FF9500;">37</div>
+          <div style="font-size:11px;color:#999;">次</div>
+        </div>
+      </div>
+      <div style="margin-top:12px;font-size:10px;color:#999;">
+        无上限，永久累计
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section" style="margin-top: 24px;">
+  <h3>粒子效果示意（完成里程碑时触发）</h3>
+  <div class="mockup">
+    <div class="mockup-header">🎉 里程碑庆祝</div>
+    <div class="mockup-body" style="padding:16px;text-align:center;background:#1d1d1f;color:white;">
+      <div style="font-size:48px;margin-bottom:8px;">🎆</div>
+      <div style="font-size:16px;font-weight:600;margin-bottom:4px;">🎊 目标达成！</div>
+      <div style="font-size:12px;color:#999;">阅读 100 本书 ✅</div>
+      <div style="margin-top:8px;font-size:11px;color:#FFD60A;">🔥 连续打卡 365 天</div>
+      <div style="margin-top:12px;font-size:10px;color:#666;">
+        粒子爆炸 + 触觉反馈 + 屏幕微震
+      </div>
+    </div>
+  </div>
+</div>

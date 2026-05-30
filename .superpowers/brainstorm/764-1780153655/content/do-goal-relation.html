@@ -1,0 +1,33 @@
+<h2>澄清问题 4：Do 与 Goal 的关联关系</h2>
+<p class="subtitle">这直接影响数据模型的核心设计——是两条平行线还是可以交叉</p>
+
+<div class="options">
+  <div class="option" data-choice="a" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <h3>完全独立（推荐 V1）</h3>
+      <p>Do 和 Goal 是<strong>两条平行轨道</strong>。完成任务不会自动推进目标，目标进度需要手动记录。好处：逻辑清晰、边界明确、不会出现隐式副作用。用户始终清楚「我在做什么」和「我在追求什么」。</p>
+      <p style="color:var(--text-secondary);font-size:13px;margin-top:8px;">数据模型：无外键关联，各自独立</p>
+    </div>
+  </div>
+  <div class="option" data-choice="b" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>可选关联</h3>
+      <p>Do 可以<strong>选择性地关联</strong>到一个 Goal。例如「每日阅读」Habit 关联到「阅读 100 本书」Progress Goal——打卡时自动 +1 本。不关联也没关系。好处：灵活性高，但数据模型和业务逻辑复杂度明显增加。</p>
+      <p style="color:var(--text-secondary);font-size:13px;margin-top:8px;">数据模型：optional Goal reference on Do items</p>
+    </div>
+  </div>
+  <div class="option" data-choice="c" onclick="toggleSelect(this)">
+    <div class="letter">C</div>
+    <div class="content">
+      <h3>强制归属</h3>
+      <p>所有 Do 必须<strong>归属于某个 Goal</strong>。没有独立的任务——一切都是为目标服务的步骤。类似 OKR 体系：Goal = Objective，Do = Key Results。好处：系统性强，但学习曲线高，违背了 PRD 中「快速记录」的 Inbox 设计。</p>
+      <p style="color:var(--text-secondary);font-size:13px;margin-top:8px;">数据模型：required Goal reference on every Do</p>
+    </div>
+  </div>
+</div>
+
+<div class="section" style="margin-top: 24px;">
+  <p style="color: var(--text-secondary); font-size: 14px;">💡 <strong>推荐 A：</strong>V1 聚焦清晰。Do 和 Goal 独立运作降低了认知负担和开发复杂度。关联功能可以在 V2 作为「自动化」特性加入（例如 Shortcuts 集成或规则引擎）。</p>
+</div>

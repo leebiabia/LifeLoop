@@ -1,0 +1,30 @@
+<h2>澄清问题 1：实现优先级</h2>
+<p class="subtitle">PRD 定义了 5 个 Tab 和完整 MVP 范围。你希望按什么顺序推进？</p>
+
+<div class="options">
+  <div class="option" data-choice="a" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <h3>核心先行</h3>
+      <p>先完成<strong>数据模型 + DoList + Goal 系统</strong>（纯逻辑层），再逐一搭建 Tab UI。好处是底层稳固，UI 只是展示层。适合「先把东西做对，再做好看」的思路。</p>
+    </div>
+  </div>
+  <div class="option" data-choice="b" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>页面驱动</h3>
+      <p>按 Tab 顺序逐个完成：<strong>Today → Inbox → Goal → 统计 → 我的</strong>。每个 Tab 包含其所需的完整数据模型 + ViewModel + View。好处是每个阶段都有可看可交互的东西。</p>
+    </div>
+  </div>
+  <div class="option" data-choice="c" onclick="toggleSelect(this)">
+    <div class="letter">C</div>
+    <div class="content">
+      <h3>骨架优先</h3>
+      <p>先搭建<strong>完整的应用骨架</strong>（TabView + 所有页面空壳 + 基础数据模型），确保导航结构正确，然后逐模块填肉。好处是架构从第一天就完整，不会后期重构导航结构。</p>
+    </div>
+  </div>
+</div>
+
+<div class="section" style="margin-top: 24px;">
+  <p style="color: var(--text-secondary); font-size: 14px;">💡 无论选哪个，数据模型设计都会在编码前完成。区别在于<strong>开发顺序</strong>和<strong>反馈节奏</strong>。</p>
+</div>

@@ -1,0 +1,248 @@
+<h2>设计第 1 节：架构 & 数据模型</h2>
+<p class="subtitle">项目结构 + SwiftData 模型层设计</p>
+
+<div class="section">
+  <h3>1. 项目目录结构</h3>
+  <div class="mockup">
+    <div class="mockup-header">LifeLoop Xcode Project Structure</div>
+    <div class="mockup-body">
+      <pre style="font-family: 'SF Mono', monospace; font-size: 12px; line-height: 1.6; color: #1d1d1f; margin: 0;">
+LifeLoop/
+├── App/
+│   ├── LifeLoopApp.swift          ← @main 入口
+│   ├── AppDelegate.swift          ← UNUserNotificationCenter 委托
+│   └── ContentView.swift          ← TabView 壳
+│
+├── Models/
+│   ├── Do/
+│   │   ├── DoItem.swift           ← 基类（所有 Do 共用字段）
+│   │   ├── TodayTask.swift        ← Today Do
+│   │   ├── HabitTask.swift        ← Habit Do
+│   │   ├── HabitRecord.swift      ← 打卡记录
+│   │   ├── PeriodTask.swift       ← Period Do
+│   │   └── DoType.swift           ← enum DoType { today, habit, period }
+│   │
+│   ├── Goal/
+│   │   ├── GoalItem.swift         ← 基类（所有 Goal 共用字段）
+│   │   ├── ProgressGoal.swift     ← 进度型目标
+│   │   ├── AccumulationGoal.swift ← 累计型目标
+│   │   ├── LifetimeGoal.swift     ← 终身目标
+│   │   ├── GoalRecord.swift       ← 目标记录
+│   │   └── GoalType.swift         ← enum GoalType { progress, accumulation, lifetime }
+│   │
+│   └── Common/
+│       ├── Priority.swift         ← enum Priority
+│       ├── Tag.swift              ← 标签模型
+│       └── RingStyle.swift        ← 圆环样式配置
+│
+├── ViewModels/
+│   ├── TodayViewModel.swift
+│   ├── InboxViewModel.swift
+│   ├── GoalViewModel.swift
+│   ├── StatsViewModel.swift
+│   └── SettingsViewModel.swift
+│
+├── Views/
+│   ├── TabView/
+│   │   └── MainTabView.swift
+│   ├── Today/                     ← Tab 1
+│   ├── Inbox/                     ← Tab 2
+│   ├── Goal/                      ← Tab 3
+│   ├── Stats/                     ← Tab 4
+│   └── Settings/                  ← Tab 5
+│
+├── Components/
+│   ├── Rings/
+│   │   ├── DoubleRingView.swift   ← Progress/Accumulation 双环
+│   │   ├── SingleRingView.swift   ← Lifetime 单环
+│   │   ├── RingAnimator.swift     ← 动画控制器
+│   │   └── ParticleEffect.swift   ← 粒子效果
+│   ├── Cards/
+│   │   ├── DoCard.swift
+│   │   ├── GoalCard.swift
+│   │   └── StatCard.swift
+│   └── Common/
+│       ├── EmptyStateView.swift
+│       └── BadgeView.swift
+│
+├── Services/
+│   ├── NotificationService.swift  ← 本地通知管理器
+│   ├── SyncService.swift          ← iCloud 同步开关
+│   ├── StreakCalculator.swift     ← 连续打卡计算
+│   └── ExportService.swift        ← 数据导出
+│
+├── Repositories/
+│   ├── DoRepository.swift         ← Do 数据访问
+│   └── GoalRepository.swift       ← Goal 数据访问
+│
+└── Extensions/
+    ├── Date+Extensions.swift
+    └── Color+Theme.swift
+      </pre>
+    </div>
+  </div>
+</div>
+
+<div class="section" style="margin-top: 24px;">
+  <h3>2. 核心数据模型（SwiftData）</h3>
+
+  <h4 style="margin-top: 20px;">DoList 模型树</h4>
+  <div class="mockup">
+    <div class="mockup-header">SwiftData Model — DoList</div>
+    <div class="mockup-body">
+      <pre style="font-family: 'SF Mono', monospace; font-size: 11px; line-height: 1.5; color: #1d1d1f; margin: 0;">
+@Model
+class DoItem {                          // ← 基类
+    var id: UUID
+    var name: String
+    var note: String
+    var createdAt: Date
+    var doType: DoType.RawValue         // "today" | "habit" | "period"
+    // ↓ 仅 TodayTask 使用
+    var startTime: Date?
+    var deadline: Date?
+    var isCompleted: Bool
+    var priority: Priority.RawValue
+    var tags: [Tag]
+}
+
+@Model
+class TodayTask: DoItem {              // ← 今日任务（继承 DoItem）
+    // 使用父类的 startTime / deadline / isCompleted
+}
+
+@Model
+class HabitTask: DoItem {              // ← 打卡任务（继承 DoItem）
+    var startDate: Date
+    var endDate: Date?
+    var reminderTime: Date?
+    var cycleType: String              // "daily" | "weekly" | "monthly" | "customDates"
+    var customDates: [Date]?
+    var currentStreak: Int
+    var totalCount: Int
+    var completionRate: Double
+    @Relationship(deleteRule: .cascade)
+    var records: [HabitRecord]
+}
+
+@Model
+class HabitRecord {                    // ← 打卡记录
+    var date: Date
+    var completedAt: Date
+    var note: String
+}
+
+@Model
+class PeriodTask: DoItem {             // ← 时期任务（继承 DoItem）
+    var startDate: Date
+    var endDate: Date
+    var isCompleted: Bool
+    // 规则：
+    // 未到 startDate → 显示在 Period 页面
+    // 到达 startDate → 自动出现在 Today
+    // 到达 endDate → 标记 Due Today
+    // 超过 endDate → 标记 Overdue
+}
+      </pre>
+    </div>
+  </div>
+
+  <h4 style="margin-top: 20px;">Goal 模型树</h4>
+  <div class="mockup">
+    <div class="mockup-header">SwiftData Model — Goal</div>
+    <div class="mockup-body">
+      <pre style="font-family: 'SF Mono', monospace; font-size: 11px; line-height: 1.5; color: #1d1d1f; margin: 0;">
+@Model
+class GoalItem {                        // ← 基类
+    var id: UUID
+    var name: String
+    var desc: String
+    var createdAt: Date
+    var goalType: GoalType.RawValue     // "progress" | "accumulation" | "lifetime"
+    var color: String                   // 主题色 hex
+    var icon: String                    // SF Symbol 名称
+    var totalRecords: Int               // 累计记录次数
+    @Relationship(deleteRule: .cascade)
+    var records: [GoalRecord]
+}
+
+@Model
+class ProgressGoal: GoalItem {         // ← 进度型目标
+    var targetValue: Double            // 目标值（100 本书）
+    var currentValue: Double           // 当前值（35 本）
+    var unit: String                   // 单位（"本"）
+    // 展示：双环结构
+    // 内圈 = currentValue / targetValue（百分比）
+    // 外圈 = totalRecords（记录次数）
+}
+
+@Model
+class AccumulationGoal: GoalItem {     // ← 累计型目标
+    var targetValue: Double            // 目标值（100 万）
+    var currentValue: Double           // 当前累计值
+    var unit: String                   // 单位（"元"）
+    // 每次记录增加数值（+100, +300, +500）
+    // 内圈 = currentValue / targetValue
+    // 外圈 = totalRecords
+}
+
+@Model
+class LifetimeGoal: GoalItem {         // ← 终身目标
+    // 无目标值，无完成状态，永久存在
+    // 展示：单环结构，中心显示累计次数
+}
+
+@Model
+class GoalRecord {                     // ← 目标记录
+    var date: Date
+    var value: Double                  // 本次增加值
+    var note: String
+}
+      </pre>
+    </div>
+  </div>
+</div>
+
+<div class="section" style="margin-top: 24px;">
+  <h3>3. 架构层图</h3>
+  <div class="mockup">
+    <div class="mockup-header">MVVM + Service + Repository 分层</div>
+    <div class="mockup-body">
+      <pre style="font-family: 'SF Mono', monospace; font-size: 11px; line-height: 1.5; color: #1d1d1f; margin: 0;">
+┌─────────────────────────────────────────────────────┐
+│  View Layer (SwiftUI)                                │
+│  TabView → TodayView / InboxView / GoalView / ...    │
+│  Components: DoubleRingView, DoCard, ...             │
+│  职责：UI 渲染、用户交互、动画                        │
+├─────────────────────────────────────────────────────┤
+│  ViewModel Layer (@Observable)                       │
+│  TodayViewModel, GoalViewModel, ...                  │
+│  职责：状态管理、业务逻辑协调、数据转换                │
+├─────────────────────────────────────────────────────┤
+│  Service Layer                                       │
+│  NotificationService, SyncService,                   │
+│  StreakCalculator, ExportService                     │
+│  职责：可复用的业务逻辑、跨模块能力                    │
+├─────────────────────────────────────────────────────┤
+│  Repository Layer                                    │
+│  DoRepository, GoalRepository                        │
+│  职责：数据访问抽象、查询封装                         │
+├─────────────────────────────────────────────────────┤
+│  Data Layer (SwiftData)                              │
+│  DoItem, GoalItem, HabitRecord, GoalRecord           │
+│  职责：数据持久化、CloudKit 同步（可选）               │
+└─────────────────────────────────────────────────────┘
+      </pre>
+    </div>
+  </div>
+</div>
+
+<div class="section" style="margin-top: 24px;">
+  <p style="color: var(--text-secondary); font-size: 14px;">
+    💡 <strong>设计要点：</strong><br>
+    • SwiftData 不支持继承映射到同一张表——实际实现中，<code>DoItem</code> 使用<strong>单表继承</strong>模式，通过 <code>doType</code> 字段区分子类型，所有字段在同一模型中，用 <code>@Transient</code> 或可选类型约束子类独有字段<br>
+    • Goal 同理，<code>GoalItem</code> 通过 <code>goalType</code> 区分子类型<br>
+    • Repository 层封装 <code>@Query</code> 和 <code>ModelContext</code> 操作，ViewModel 不直接依赖 SwiftData 框架<br>
+    • 圆环组件是纯 SwiftUI <code>Canvas</code> + <code>SpriteView</code>，不依赖任何第三方 UI 库
+  </p>
+</div>

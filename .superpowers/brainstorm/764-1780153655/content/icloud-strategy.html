@@ -1,0 +1,33 @@
+<h2>澄清问题 2：iCloud 同步策略</h2>
+<p class="subtitle">SwiftData + CloudKit 在 iOS 18 中有两种实现路径，这会影响模型设计和用户体验</p>
+
+<div class="options">
+  <div class="option" data-choice="a" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <h3>纯本地优先（推荐）</h3>
+      <p>数据<strong>默认存本地</strong>，iCloud 同步是可选项（用户在"我的"Tab 中开启）。使用 SwiftData 的 CloudKit 镜像同步。好处是：离线可用、不需要 iCloud 账户也能用、同步是增量功能而非必需依赖。</p>
+      <p style="color:var(--text-secondary);font-size:13px;margin-top:8px;">技术路线：ModelConfiguration 按需切换 cloudKit 容器</p>
+    </div>
+  </div>
+  <div class="option" data-choice="b" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>iCloud 强制同步</h3>
+      <p>数据<strong>直接从 iCloud 容器</strong>读取，所有设备自动同步。好处是真正的多设备无缝体验，用户无需手动管理。但要求用户必须有 iCloud 账户，且离线场景需要处理冲突。</p>
+      <p style="color:var(--text-secondary);font-size:13px;margin-top:8px;">技术路线：直接使用 CloudKit 容器作为数据源</p>
+    </div>
+  </div>
+  <div class="option" data-choice="c" onclick="toggleSelect(this)">
+    <div class="letter">C</div>
+    <div class="content">
+      <h3>Core Data + CloudKit（传统方案）</h3>
+      <p>放弃 SwiftData，使用更成熟的 <strong>Core Data + NSPersistentCloudKitContainer</strong>。好处是方案成熟、坑少、社区资源多。代价是无法享受 SwiftData 的声明式语法和 Observable 集成。</p>
+      <p style="color:var(--text-secondary);font-size:13px;margin-top:8px;">技术路线：NSPersistentCloudKitContainer + @FetchRequest</p>
+    </div>
+  </div>
+</div>
+
+<div class="section" style="margin-top: 24px;">
+  <p style="color: var(--text-secondary); font-size: 14px;">💡 <strong>推荐 A：</strong>对于 V1 个人成长管理应用，本地优先 + 可选同步是最务实的选择。纯本地可用意味着 iCloud 不是阻塞依赖，同步开启后也能覆盖多设备场景。iOS 18 的 SwiftData 对 CloudKit 的支持相比 iOS 17 已有明显改善。</p>
+</div>
