@@ -7,8 +7,7 @@ options:
 
 settings:
   base:
-    SWIFT_VERSION: "5.0"
-    ENABLE_USER_SCRIPT_SANDBOXING: "NO"
+    ENABLE_USER_SCRIPT_SANDBOXING: NO
 
 targets:
   LifeLoop:
@@ -20,6 +19,8 @@ targets:
       base:
         INFOPLIST_FILE: GoodList/Info.plist
         PRODUCT_BUNDLE_IDENTIFIER: app.lifeloop.lifeloop
+        GENERATE_INFOPLIST_FILE: NO
+        SWIFT_EMIT_LOC_STRINGS: YES
     preBuildScripts:
       - name: "SwiftLint"
         script: |

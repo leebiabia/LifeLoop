@@ -12,21 +12,21 @@ final class DoRepository {
 
     func fetchTodayTasks() throws -> [DoItem] {
         let descriptor = FetchDescriptor<DoItem>(
-            predicate: #Predicate { $0.doTypeRaw == DoType.today.rawValue && !$0.isCompleted }
+            predicate: #Predicate { $0.doTypeRaw == "today" && !$0.isCompleted }
         )
         return try context.fetch(descriptor)
     }
 
     func fetchCompletedTodayTasks() throws -> [DoItem] {
         let descriptor = FetchDescriptor<DoItem>(
-            predicate: #Predicate { $0.doTypeRaw == DoType.today.rawValue && $0.isCompleted }
+            predicate: #Predicate { $0.doTypeRaw == "today" && $0.isCompleted }
         )
         return try context.fetch(descriptor)
     }
 
     func fetchHabits() throws -> [DoItem] {
         let descriptor = FetchDescriptor<DoItem>(
-            predicate: #Predicate { $0.doTypeRaw == DoType.habit.rawValue }
+            predicate: #Predicate { $0.doTypeRaw == "habit" }
         )
         return try context.fetch(descriptor)
     }
@@ -35,7 +35,7 @@ final class DoRepository {
         let now = Date()
         let descriptor = FetchDescriptor<DoItem>(
             predicate: #Predicate {
-                $0.doTypeRaw == DoType.period.rawValue &&
+                $0.doTypeRaw == "period" &&
                 $0.periodStartDate != nil &&
                 $0.periodStartDate! <= now &&
                 !$0.periodIsCompleted
@@ -48,7 +48,7 @@ final class DoRepository {
         let now = Date()
         let descriptor = FetchDescriptor<DoItem>(
             predicate: #Predicate {
-                $0.doTypeRaw == DoType.period.rawValue &&
+                $0.doTypeRaw == "period" &&
                 $0.periodStartDate != nil &&
                 $0.periodStartDate! > now
             }
