@@ -41,7 +41,7 @@ struct ContentView: View {
 }
 
 // MARK: - Placeholder views (to be replaced by real implementations)
+// GoalListView is implemented in GoodList/Views/Goal/GoalListView.swift
 struct InboxView: View { var body: some View { Text("收集箱") } }
-struct GoalListView: View { var body: some View { Text("目标") } }
 struct StatsView: View { var body: some View { Text("统计") } }
 struct SettingsView: View { var body: some View { Text("我的") } }
