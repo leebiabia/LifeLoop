@@ -1,18 +1,47 @@
 import SwiftUI
+import SwiftData
 
 struct ContentView: View {
+    @Environment(\.modelContext) private var modelContext
+
     var body: some View {
         TabView {
-            Text("今日")
-                .tabItem { Label("今日", systemImage: "calendar") }
-            Text("收集箱")
-                .tabItem { Label("收集箱", systemImage: "tray") }
-            Text("目标")
-                .tabItem { Label("目标", systemImage: "scope") }
-            Text("统计")
-                .tabItem { Label("统计", systemImage: "chart.bar") }
-            Text("我的")
-                .tabItem { Label("我的", systemImage: "person.circle") }
+            TodayView()
+                .tabItem {
+                    Image(systemName: "calendar")
+                    Text("今日")
+                }
+
+            InboxView()
+                .tabItem {
+                    Image(systemName: "tray")
+                    Text("收集箱")
+                }
+
+            GoalListView()
+                .tabItem {
+                    Image(systemName: "scope")
+                    Text("目标")
+                }
+
+            StatsView()
+                .tabItem {
+                    Image(systemName: "chart.bar")
+                    Text("统计")
+                }
+
+            SettingsView()
+                .tabItem {
+                    Image(systemName: "person.circle")
+                    Text("我的")
+                }
         }
+        .tint(.blue)
     }
 }
+
+// MARK: - Placeholder views (to be replaced by real implementations)
+struct InboxView: View { var body: some View { Text("收集箱") } }
+struct GoalListView: View { var body: some View { Text("目标") } }
+struct StatsView: View { var body: some View { Text("统计") } }
+struct SettingsView: View { var body: some View { Text("我的") } }
